@@ -3,45 +3,36 @@ class ProductsController < ApplicationController
   respond_to :html
 
   def index
-    @products = current_user.products.all
+    respond_with resource.collection
   end
 
   def show
-    @product = current_user.products.find(params[:id])
+    respond_with resource.read
   end
 
   def new
-    @product = current_user.products.build
+    respond_with resource.build
   end
 
   def edit
-    @product = current_user.products.find(params[:id])
+    respond_with resource.edit
   end
 
   def create
-    @product = current_user.products.build(params[:product])
-
-    if @product.save
-      redirect_to @product, notice: 'Product was successfully created.'
-    else
-      render action: "new"
-    end
+    respond_with resource.create, location: products_path
   end
 
   def update
-    @product = current_user.products.find(params[:id])
-
-    if @product.update_attributes(params[:product])
-      redirect_to @product, notice: 'Product was successfully updated.'
-    else
-      render action: "edit"
-    end
+    respond_with resource.update, location: products_path
   end
 
   def destroy
-    @product = current_user.products.find(params[:id])
-    @product.destroy
+    respond_with resource.destroy, location: products_path
+  end
 
-    redirect_to products_url
+  private
+
+  def resource
+    @resource ||= Products::Base.new(as: current_user, params: params)
   end
 end

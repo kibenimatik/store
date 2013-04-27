@@ -84,7 +84,7 @@ describe ProductsController do
 
       it "redirects to the created product" do
         post :create, {:product => valid_attributes}, valid_session
-        response.should redirect_to(Product.last)
+        response.should redirect_to(products_url)
       end
     end
 
@@ -96,26 +96,17 @@ describe ProductsController do
         assigns(:product).should be_a_new(Product)
       end
 
-      it "re-renders the 'new' template" do
+      it "sets 302 response status" do
         # Trigger the behavior that occurs when invalid params are submitted
         Product.any_instance.stub(:save).and_return(false)
         post :create, {:product => { "vendor" => "invalid value" }}, valid_session
-        response.should render_template("new")
+        response.status.should eq(302)
       end
     end
   end
 
   describe "PUT update" do
     describe "with valid params" do
-      it "updates the requested product" do
-        product = user.products.create! valid_attributes
-        # Assuming there are no other products in the database, this
-        # specifies that the Product created on the previous line
-        # receives the :update_attributes message with whatever params are
-        # submitted in the request.
-        Product.any_instance.should_receive(:update_attributes).with({ "vendor" => "MyString" })
-        put :update, {:id => product.to_param, :product => { "vendor" => "MyString" }}, valid_session
-      end
 
       it "assigns the requested product as @product" do
         product = user.products.create! valid_attributes
@@ -126,7 +117,7 @@ describe ProductsController do
       it "redirects to the product" do
         product = user.products.create! valid_attributes
         put :update, {:id => product.to_param, :product => valid_attributes}, valid_session
-        response.should redirect_to(product)
+        response.should redirect_to(products_url)
       end
     end
 
@@ -139,12 +130,12 @@ describe ProductsController do
         assigns(:product).should eq(product)
       end
 
-      it "re-renders the 'edit' template" do
+      it "sets 302 response status" do
         product = user.products.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Product.any_instance.stub(:save).and_return(false)
         put :update, {:id => product.to_param, :product => { "vendor" => "invalid value" }}, valid_session
-        response.should render_template("edit")
+        response.status.should eq(302)
       end
     end
   end
