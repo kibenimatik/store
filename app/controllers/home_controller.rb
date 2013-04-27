@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
+  respond_to :html
+
   def index
-    @products = Product.all
+    respond_with Products::Base.new(as: current_user, params: params).collection
   end
 end

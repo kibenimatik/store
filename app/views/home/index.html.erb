@@ -4,7 +4,7 @@
     <tr>
       <td><%= product.vendor %></td>
       <td><%= product.model %></td>
-      <td><%= number_to_currency(product.price_in_cents/100.to_f) %></td>
+      <td><%= number_to_currency(product.price) %></td>
     </tr>
   <% end %>
 </table>
