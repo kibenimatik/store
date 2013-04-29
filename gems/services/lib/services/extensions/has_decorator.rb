@@ -13,24 +13,37 @@ module Services::Extensions
     end
 
     def decorated_collection
-      collection = if build_collection.kind_of?(Array)
-        build_collection
-      elsif build_collection.respond_to?(:all)
-        build_collection.all
+      if decorable?
+        build_decorated_collection
       else
-        Array.wrap(build_collection)
+        build_collection
       end
-      return collection.map{|i| decorator_class.new(i)}
     end
 
     private
 
+    def decorable?
+      !self.class.decorator_class_name.nil?
+    end
+
     def decorator_class
-      if self.class.decorator_class_name
-        self.class.decorator_class_name.to_s.classify.constantize
+      self.class.decorator_class_name.to_s.classify.constantize
+    end
+
+    def prepare_collection_for_decorate
+      collection = build_collection
+
+      if collection.kind_of?(Array)
+        return collection
+      elsif collection.respond_to?(:all)
+        return collection.all
       else
-        Services::Decorator
+        return Array.wrap(collection)
       end
+    end
+
+    def build_decorated_collection
+      prepare_collection_for_decorate.map{|i| decorator_class.new(i)}
     end
   end
 end

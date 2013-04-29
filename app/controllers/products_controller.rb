@@ -33,6 +33,6 @@ class ProductsController < ApplicationController
   private
 
   def resource
-    @resource ||= Products::Base.new(as: current_user, params: params)
+    @resource ||= Products::UserResource.new(as: current_user, params: params)
   end
 end

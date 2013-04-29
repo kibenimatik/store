@@ -39,7 +39,7 @@ module Services
     end
 
     describe '#collection' do
-      it 'responds with collection' do
+      it 'responds with decorated collection' do
         subject.should_receive(:build_collection).and_return(collection)
         subject.should_receive(:respond_with).with(collection, 'foos')
         subject.collection

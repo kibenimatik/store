@@ -37,11 +37,12 @@ describe ProductsController do
   let(:valid_session) { {} }
 
   describe "GET index" do
-    it "assigns all products as @products" do
+    it "assigns and decorate all products as @products" do
       product = user.products.create! valid_attributes
       get :index, {}, valid_session
       # response.should be_success
-      assigns(:products).should eq([product])
+      assigns(:products).should be_kind_of(Array)
+      assigns(:products).first.should be_kind_of(Products::Decorator) #.new(product)])
     end
   end
 
